@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chill Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            // Your Tailwind config here
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .heart {
+            color: #ff6b6b;
+            display: inline-block;
+            font-size: 1.2em;
+            transform: scale(1);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .game-option {
+            transition: all 0.3s ease;
+        }
+        .game-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen font-sans">
+    <audio id="background-audio" loop muted>
+      <source src="Golden-Hour-chosic.com_.mp3" type="audio/mpeg">
+      <source src="background-music.wav" type="audio/wav">
+    </audio>
+    <div style="background-image: url('fd40a4b8b151c4e432106576187d03c9.gif'); height: 3000px; width: 100%;">
+        <div class="container mx-auto px-4 py-8 max-w-3xl"> 
+            <!-- Login Screen -->
+            <img src="My melody pixel art.jpg" alt="Chill Game Logo" class="mx-auto mb-4 rounded-full w-20 h-20 opacity-1000">
+            <div id="login-screen" class="bg-purple rounded-xl shadow-lg p-6 fade-in blur-70 opacity-100">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-purple-800b opacity-100">Chill Game</h1
+                                                                              <p class="text-white-600 mt-2 opacity-100">Made with love. Hope you like it <3 </p>
+                    <p class="text-white-600 mt-2 opacity-100">Please log urself in</p>
+                </div>
+
+                <div class="mb-4 opacity-100">
+                    <label for="username" class="block text-white-700 font-medium mb-2 opacity-200">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg opacity-100 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                </div>
+
+                <div class="mb-6 opacity-100">
+                    <label for="password" class="block text-gray-700 font-medium mb-2 opacity-100">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 opacity-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                </div>
+
+                <button id="login-btn" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 opacity-100 rounded-lg transition transform hover:scale-105">
+                    Login
+                </button>
+
+                <p id="login-error" class="text-red-500 opacity-100 mt-4 hidden">Incorrect username or password. Please try again.</p>
+            </div>
+
+            <!-- Main Menu (Hidden Initially) -->
+        <div id="main-menu" class="bg-white rounded-xl shadow-lg p-6 hidden fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 id="welcome-message" class="text-2xl font-bold text-purple-800"></h2>
+                    <p class="text-gray-600">Choose a game to play below</p>
+                </div>
+                <button id="logout-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                    Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="game-option bg-purple-50 rounded-xl p-6 text-center cursor-pointer" data-game="1">
+                    <div class="bg-white p-3 rounded-full inline-block mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Guess the Number</h3>
+                    <p class="text-gray-600 text-sm">Guess a number between 1 and 100. If correct, I'll be your bf. If incorrect, you'll be my gf.</p>
+                </div>
+
+                <div class="game-option bg-purple-50 rounded-xl p-6 text-center cursor-pointer" data-game="2">
+                    <div class="bg-white p-3 rounded-full inline-block mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Positive or Negative</h3>
+                    <p class="text-gray-600 text-sm">Meh, boring</p>
+                </div>
+
+                <div class="game-option bg-purple-50 rounded-xl p-6 text-center cursor-pointer" data-game="3">
+                    <div class="bg-white p-3 rounded-full inline-block mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Be My Girlfriend</h3>
+                    <p class="text-gray-600 text-sm">PLEASEE PLAY THIS ONE :)))</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 1: Guess the Number -->
+        <div id="game1-screen" class="bg-white rounded-xl shadow-lg p-6 hidden fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-800">Guess the Number</h2>
+                <button id="back-to-menu1" class="text-purple-600 hover:text-purple-800 transition">
+                    ← Back to Menu
+                </button>
+            </div>
+
+            <p class="mb-6 text-gray-700">Guess a number between 1 and 100. If correct, I'll be your bf. If incorrect, you'll be my gf.</p>
+
+            <div class="flex flex-col md:flex-row gap-4 items-center md:items-end">
+                <div class="flex-1">
+                    <img src="Kaoruko Glasses.jpg" alt="Kaoruko Glasses" class="mx-auto mb-6 rounded-lg">
+                    <label for="guess-input" class="block text-gray-700 font-medium mb-2">Your Guess</label>
+                    <input type="number" id="guess-input" min="1" max="100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                </div>
+                <button id="submit-guess" class="bg-pink-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg h-12 transition transform hover:scale-105">
+                    Submit
+                </button>
+            </div>
+
+            <div id="guess-result" class="mt-8 hidden">
+                <div id="correct-guess" class="hidden bg-green-50 text-green-800 p-4 rounded-lg mb-4">
+                    <img src="Kaoruko woaw.jpg" alt="Kaoruko woaw" class="mx-auto mb-6 rounded-lg">
+                    <h3 class="font-bold mb-2">CORRECT <span class="heart">❤</span> now I'm your boyfriend!</h3>
+                </div>
+
+                <div id="wrong-guess" class="hidden bg-pink-50 text-pink-800 p-4 rounded-lg">
+                    <h3 class="font-bold mb-2">Sorry wrong number!</h3>
+                    <p>The number was <span id="correct-number" class="font-bold">42</span></p>
+                    <p>You guessed <span id="user-guess" class="font-bold"></span></p>
+                    <p>Difference between guess and answer: <span id="guess-difference" class="font-bold"></span></p>
+                    <div id="guess-feedback" class="mt-2 font-bold"></div>
+                    <img src="Kaoruko Yippie.gif" alt="Kaoruko sad" class="mx-auto mt-6 rounded-lg">
+                    <p class="mt-3">CONGRATULATIONS you are my girlfriend now <span class="heart">❤</span>!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 2: Positive or Negative -->
+        <div id="game2-screen" class="bg-white rounded-xl shadow-lg p-6 hidden fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-800">Positive or Negative</h2>
+                <button id="back-to-menu2" class="text-purple-600 hover:text-purple-800 transition">
+                    ← Back to Menu
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <label for="number-input" class="block text-gray-700 font-medium mb-2">Enter a number</label>
+                <input type="number" id="number-input" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+            </div>
+
+            <button id="check-number" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg mb-6 transition transform hover:scale-105">
+                Check Number
+            </button>
+
+            <div id="number-result" class="hidden bg-blue-50 text-blue-800 p-4 rounded-lg mb-6">
+                <h3 id="result-text" class="font-bold"></h3>
+            </div>
+
+            <div id="continue-prompt" class="hidden">
+                <p class="mb-4 text-gray-700">Continue?</p>
+                <div class="flex gap-4">
+                    <button id="continue-yes" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition transform hover:scale-105">
+                        Yes
+                    </button>
+                    <button id="continue-no" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition transform hover:scale-105">
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 3: Be My Girlfriend -->
+        <div id="game3-screen" class="bg-white rounded-xl shadow-lg p-6 hidden fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-800">Be My Girlfriend</h2>
+                <button id="back-to-menu3" class="text-purple-600 hover:text-purple-800 transition">
+                    ← Back to Menu
+                </button>
+            </div>
+
+            <div id="girlfriend-step1" class="text-center">
+                <img src="Kaoruko woaw.jpg" alt="Kaoruko woaw" class="mx-auto mb-6 rounded-lg">
+                <p class="text-lg font-medium mb-6">I love you, will you be my girlfriend?</p>
+
+                <div class="flex justify-center gap-6">
+                    <button id="gf-yes1" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full transition transform hover:scale-105">
+                        Yes <span class="heart">❤</span>
+                    </button>
+                    <button id="gf-no1" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-8 rounded-full transition">
+                        No
+                    </button>
+                </div>
+            </div>
+
+            <div id="girlfriend-step2" class="text-center hidden">
+                <div id="gf-response-affirmative" class="hidden bg-pink-50 text-pink-800 p-6 rounded-lg mb-6">
+                    <img src="Kaoruko Yippie.gif" alt="Kaoruko Happy" class="mx-auto mb-6 rounded-lg">
+                    <h3 class="font-bold text-xl mb-2">I love you too!</h3>
+                    <p class="text-gray-700">Thank you so much for choosing me as your boyfriend and for willing to be my girlfriend. I love you <span class="heart">❤</span></p>
+                </div>
+
+                <div id="gf-response-negative" class="hidden">
+                    <img src="Kaoruko Sad.png" alt="Kaoruko sad" class="mx-auto mb-6 rounded-lg">
+                    <p class="font-medium mb-6">Please :(</p>
+
+                    <p class="mb-4 text-gray-700">1. Change your mind?</p>
+                    <p class="mb-6 text-gray-700">2. No</p>
+
+                    <div class="flex justify-center gap-6">
+                        <button id="gf-yes2" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full transition transform hover:scale-105">
+                            Maybe Yes
+                        </button>
+                        <button id="gf-no2" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-8 rounded-full transition">
+                            Still No
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="girlfriend-step3" class="text-center hidden">
+                <div id="gf-response-affirmative2" class="hidden bg-pink-50 text-pink-800 p-6 rounded-lg mb-6">
+                    <img src="Kaoruko Happy.png" alt="Kaoruko Happy" class="mx-auto mb-6 rounded-lg">
+                    <h3 class="font-bold text-xl mb-2">I love you too, let's be a couple <span class="heart">❤</span></h3>
+                    <p class="text-gray-700">Thank you so much for choosing me as your boyfriend and for willing to be my girlfriend. I love you <span class="heart">❤</span></p>
+                </div>
+
+                <div id="gf-response-negative2" class="hidden">
+                    <img src="Kaoruko Sad.png" alt="Kaoruko sad" class="mx-auto mb-6 rounded-lg">
+                    <p class="font-medium mb-4">I'll be so sad :((</p>
+
+                    <p class="mb-4 text-gray-700">You love me now?</p>
+
+                    <div class="flex justify-center gap-6">
+                        <button id="gf-yes3" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full transition transform hover:scale-105">
+                            Yes Now
+                        </button>
+                        <button id="gf-no3" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-8 rounded-full transition">
+                            Not Yet
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="girlfriend-final-letter" class="hidden bg-yellow-50 text-yellow-800 p-6 rounded-lg mt-6">
+                <h3 class="font-bold text-xl mb-4">Before you go...</h3>
+                <img src="Kaoruko Matane.jpg" alt="Kaoruko Matane" class="mx-auto mb-4 rounded-full w-20 h-18">
+                <p class="mb-6 font-medium">Would you mind reading this little letter I wrote for you?</p>
+
+                <div class="flex justify-center gap-6">
+                    <button id="read-letter" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-8 rounded-full transition transform hover:scale-105">
+                        Read Letter
+                    </button>
+                    <button id="dont-read" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-8 rounded-full transition">
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+
+            <div id="letter-content" class="hidden bg-white border-2 border-purple-200 p-6 rounded-lg mt-6">
+                <div class="text-center mb-4">
+                    <img src="Kaoruko Smile.jpg" alt="Kaoruko Smile" class="mx-auto mb-4 rounded-full w-20 h-18">
+                </div>
+                <p class="mb-4 italic text-gray-700 indent-8">My dearest Cal,</p>
+                <p class="mb-3 text-gray-700">Kalo kamu baca ini, berarti tadi kamu nolak aku hahah(don’t worry about it, no hard feelings🤙). Btw thank you banget udah mau spend waktu sama aku sepanjang aku kenal kamu 7 tahun. Seneng banget akhirnya bisa ketemu dan liat kamu lagi setelah bertahun-tahun, terlepas dari sedikit banget kesempatan buat aku ngeliat kamu. Even though you didn't say yes today, I want you to know how much you mean to me. For your smile never fails to brighten my darkest days, and your presence alone brings long-term warmth to my heart. Jujur aku waktu itu aku merasa balik jadi versi bocah kelas 6 SD pas baru kenal kamu.</p>
+                <p class="mb-3 text-gray-700">Btw Kamu inget ngga waktu kita jalan di stasiun Kota Tua? Ada violin street performer yang main lagu Blue waktu kita datang, dan mainin lagu A Thousand Years waktu kita mau pulang. Iya, masing-masing lagu itu adalah lagu favorit kita berdua. Jujur aku berusaha nahan air mata waktu aku denger lagu A Thousand Years dimainin pas kita jalan berdua. Karena isi lagu itu adalah niatku ke kamu. Dalam periode itu, aku ngga bosen berdoa buat kamu dan mungkin doa supaya aku bisa jadi pasangan kamu juga(kalo yang ini sekali-sekali doang soalnya agak malu). Aku bisa liat kamu sehat dan ceria sekarang juga aku senang karena salah satu doa aku terkabul.</p>
+                <p class="mb-3 text-gray-700">Aku juga keinget banyak momen waktu kita kelas 6. Momen-momen sebelum UN. Inget ngga waktu aku sering ngejek nama bapak pas Sd? Atau pas hpku disita sama pelatih perpisahan? And the best part was you. Because you were there all the time. Alongside Radit dan Juan. Kalian membentuk memori indah dari hari-hari itu. I really miss those days.</p>
+                <p class="mb-3 text-gray-700">Ngga jarang nama kamu ada di doaku. Poin utamaku bukan supaya kamu dipaksakan buat ada di sisiku, tapi aku mau supaya kamu menemukan kebahagiaan kamu sendiri dengan ataupun tanpa aku, kesuksesan kamu sendiri, kekuatan di setiap pergumulan yang kamu hadapi, dan penyertaan Tuhan di setiap langkah hidup yang kamu ambil. Kalo kamu bahagia, akupun bahagia. 
+</p>
+                <p class="mb-3 text-gray-700">Janjiku tetap. I have loved you for 7 years. I’ll love you for a thousand years and i will love you for a thousand more. Semoga semua yang kamu perjuangkan berhasil tercapai. Semoga dalam semua pergumulan, harapan kamu tidak akan pernah padam. Karena kamu lilin kecilku. Semoga hati kamu yang baik, berada di tangan yang baik. Karena berapa kalipun aku terlahir kembali, aku akan tetap memilih buat mengasihi kamu. Walaupun aku terlahir jadi kucing, alang-alang, atau bahkan terlahir sebagai bunga Violet di atas gerbang utama ITB. Karena kamu adalah surat pertamaku.
+</p>
+                <p class="mb-3 text-gray-700">Semoga kamu selalu merasakan hangatnya doa-doaku buat kamu.</p>
+                <p class="mb-3 text-gray-700">I promise to be patient, to cherish every moment with you, and to always be there when you need me. Maybe one day you'll see in me what I see in you.</p>
+                <p class="mb-4 text-gray-700">Until that day comes, I'll keep hoping, keep wishing, and keep loving you from afar.</p>
+                <p class="mb-4 text-gray-700">Truly, you have been such a wondeful blessing for me.</p>
+                <p class="mb-4 text-gray-700">May God bless you. Forever.</p>
+                <p class="mb-4 text-gray-700">Ps: for you</p>
+                <a href="https://open.spotify.com/track/0uZFcsx96wzbixsULmrg8o?si=6ca96c38930c4768">Click here for a little song</a>
+                <p class="mb-4 text-gray-700">Or copy this URL:</p>
+                <p class="mb-4 text-gray-700">https://open.spotify.com/track/0uZFcsx96wzbixsULmrg8o?si=6ca96c38930c4768</p>
+                <p class="mb-4 text-gray-700">:)</p>
+                <p class="italic text-gray-700 indent-8">Forever yours,</p>
+                <p class="text-right text-purple-600 font-medium">Ocean</p>
+                <div class="text-center mt-6">
+                    <p class="font-bold">Thank you so much for reading this letter. I love you for a thousand years <span class="heart">❤</span></p>
+                    <p class="font-bold"> And I'll love you for a thousand more<span class="heart">❤</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const CORRECT_USERNAME = "Cal";
+        const CORRECT_PASSWORD = "Evergarden";
+        const SECRET_NUMBER = 42;
+
+        // Audio handling
+        const backgroundAudio = document.getElementById('background-audio');
+
+        // Try to play audio when page loads
+        window.addEventListener('load', () => {
+            backgroundAudio.muted = false;
+            backgroundAudio.play().catch(e => {
+                console.log('Autoplay prevented, will play on user interaction');
+            });
+        });
+
+        // Play audio on first user interaction
+        document.addEventListener('click', () => {
+            if (backgroundAudio.paused) {
+                backgroundAudio.muted = false;
+                backgroundAudio.play();
+            }
+        }, { once: true });
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const mainMenu = document.getElementById('main-menu');
+        const game1Screen = document.getElementById('game1-screen');
+        const game2Screen = document.getElementById('game2-screen');
+        const game3Screen = document.getElementById('game3-screen');
+        const welcomeMessage = document.getElementById('welcome-message');
+
+        // Login functionality
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginError = document.getElementById('login-error');
+
+            if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+                loginScreen.classList.add('hidden');
+                mainMenu.classList.remove('hidden');
+                welcomeMessage.textContent = `Hello, ${username}!`;
+                loginError.classList.add('hidden');
+            } else {
+                loginError.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            mainMenu.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+
+            // Hide all game screens if visible
+            [game1Screen, game2Screen, game3Screen].forEach(screen => {
+                if (!screen.classList.contains('hidden')) {
+                    resetGame(screen.id);
+                    screen.classList.add('hidden');
+                }
+            });
+        });
+
+        // Game selection
+        document.querySelectorAll('.game-option').forEach(option => {
+            option.addEventListener('click', () => {
+                mainMenu.classList.add('hidden');
+                const gameNumber = option.getAttribute('data-game');
+
+                switch(gameNumber) {
+                    case '1':
+                        game1Screen.classList.remove('hidden');
+                        break;
+                    case '2':
+                        game2Screen.classList.remove('hidden');
+                        break;
+                    case '3':
+                        game3Screen.classList.remove('hidden');
+                        break;
+                }
+            });
+        });
+
+        // Back to menu buttons
+        document.getElementById('back-to-menu1').addEventListener('click', () => {
+            resetGame('game1-screen');
+            game1Screen.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+        });
+
+        document.getElementById('back-to-menu2').addEventListener('click', () => {
+            resetGame('game2-screen');
+            game2Screen.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+        });
+
+        document.getElementById('back-to-menu3').addEventListener('click', () => {
+            resetGame('game3-screen');
+            game3Screen.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+        });
+
+        // Game 1: Guess the Number
+        document.getElementById('submit-guess').addEventListener('click', () => {
+            const guessInput = document.getElementById('guess-input');
+            const guess = parseInt(guessInput.value);
+
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                alert('Please enter a number between 1 and 100');
+                return;
+            }
+
+            const resultContainer = document.getElementById('guess-result');
+            resultContainer.classList.remove('hidden');
+
+            if (guess === SECRET_NUMBER) {
+                document.getElementById('correct-guess').classList.remove('hidden');
+                document.getElementById('wrong-guess').classList.add('hidden');
+            } else {
+                document.getElementById('correct-guess').classList.add('hidden');
+                document.getElementById('wrong-guess').classList.remove('hidden');
+
+                document.getElementById('user-guess').textContent = guess;
+                document.getElementById('correct-number').textContent = SECRET_NUMBER;
+
+                const difference = Math.abs(guess - SECRET_NUMBER);
+                document.getElementById('guess-difference').textContent = difference;
+
+                const feedback = document.getElementById('guess-feedback');
+                if (difference > 10) {
+                    feedback.textContent = "You're way off heheh";
+                } else {
+                    feedback.textContent = "Close! Just a little more!";
+                }
+            }
+        });
+
+        // Game 2: Positive or Negative
+        document.getElementById('check-number').addEventListener('click', () => {
+            const numberInput = document.getElementById('number-input');
+            const number = parseInt(numberInput.value);
+
+            if (isNaN(number)) {
+                alert('Please enter a valid number');
+                return;
+            }
+
+            const resultContainer = document.getElementById('number-result');
+            resultContainer.classList.remove('hidden');
+
+            const resultText = document.getElementById('result-text');
+            if (number > 0) {
+                resultText.textContent = "The number is positive.";
+            } else if (number < 0) {
+                resultText.textContent = "The number is negative.";
+            } else {
+                resultText.textContent = "The number is zero.";
+            }
+
+            document.getElementById('continue-prompt').classList.remove('hidden');
+        });
+
+        document.getElementById('continue-yes').addEventListener('click', () => {
+            document.getElementById('number-input').value = '';
+            document.getElementById('number-result').classList.add('hidden');
+            document.getElementById('continue-prompt').classList.add('hidden');
+        });
+
+        document.getElementById('continue-no').addEventListener('click', () => {
+            resetGame('game2-screen');
+            game2Screen.classList.add('hidden');
+            mainMenu.classList.remove('hidden');
+        });
+
+        // Game 3: Be My Girlfriend
+        document.getElementById('gf-yes1').addEventListener('click', () => {
+            document.getElementById('girlfriend-step1').classList.add('hidden');
+            document.getElementById('girlfriend-step2').classList.remove('hidden');
+            document.getElementById('gf-response-affirmative').classList.remove('hidden');
+            document.getElementById('gf-response-negative').classList.add('hidden');
+        });
+
+        document.getElementById('gf-no1').addEventListener('click', () => {
+            document.getElementById('girlfriend-step1').classList.add('hidden');
+            document.getElementById('girlfriend-step2').classList.remove('hidden');
+            document.getElementById('gf-response-affirmative').classList.add('hidden');
+            document.getElementById('gf-response-negative').classList.remove('hidden');
+        });
+
+        document.getElementById('gf-yes2').addEventListener('click', () => {
+            document.getElementById('girlfriend-step2').classList.add('hidden');
+            document.getElementById('girlfriend-step3').classList.remove('hidden');
+            document.getElementById('gf-response-affirmative2').classList.remove('hidden');
+            document.getElementById('gf-response-negative2').classList.add('hidden');
+        });
+
+        document.getElementById('gf-no2').addEventListener('click', () => {
+            document.getElementById('girlfriend-step2').classList.add('hidden');
+            document.getElementById('girlfriend-step3').classList.remove('hidden');
+            document.getElementById('gf-response-affirmative2').classList.add('hidden');
+            document.getElementById('gf-response-negative2').classList.remove('hidden');
+        });
+
+        document.getElementById('gf-yes3').addEventListener('click', () => {
+            document.getElementById('gf-response-negative2').classList.add('hidden');
+            document.getElementById('gf-response-affirmative2').classList.remove('hidden');
+        });
+
+        document.getElementById('gf-no3').addEventListener('click', () => {
+            document.getElementById('girlfriend-final-letter').classList.remove('hidden');
+        });
+
+        document.getElementById('read-letter').addEventListener('click', () => {
+            document.getElementById('letter-content').classList.remove('hidden');
+            document.getElementById('dont-read').classList.add('hidden');
+            document.getElementById('read-letter').textContent = "Beautiful ♥";
+        });
+
+        document.getElementById('dont-read').addEventListener('click', () => {
+            document.getElementById('letter-content').classList.remove('hidden');
+            document.getElementById('dont-read').classList.add('hidden');
+            document.getElementById('read-letter').textContent = "Sneak Peek?";
+        });
+
+        // Helper function to reset game states
+        function resetGame(gameId) {
+            switch(gameId) {
+                case 'game1-screen':
+                    document.getElementById('guess-input').value = '';
+                    document.getElementById('guess-result').classList.add('hidden');
+                    document.getElementById('correct-guess').classList.add('hidden');
+                    document.getElementById('wrong-guess').classList.add('hidden');
+                    break;
+
+                case 'game2-screen':
+                    document.getElementById('number-input').value = '';
+                    document.getElementById('number-result').classList.add('hidden');
+                    document.getElementById('continue-prompt').classList.add('hidden');
+                    break;
+
+                case 'game3-screen':
+                                        document.getElementById('girlfriend-step1').classList.remove('hidden');
+                    document.getElementById('girlfriend-step2').classList.add('hidden');
+                    document.getElementById('girlfriend-step3').classList.add('hidden');
+                    document.getElementById('gf-response-affirmative').classList.add('hidden');
+                    document.getElementById('gf-response-negative').classList.add('hidden');
+                    document.getElementById('gf-response-affirmative2').classList.add('hidden');
+                    document.getElementById('gf-response-negative2').classList.add('hidden');
+                    document.getElementById('girlfriend-final-letter').classList.add('hidden');
+                    document.getElementById('letter-content').classList.add('hidden');
+                    document.getElementById('dont-read').classList.remove('hidden');
+                    document.getElementById('read-letter').textContent = "Read Letter";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
